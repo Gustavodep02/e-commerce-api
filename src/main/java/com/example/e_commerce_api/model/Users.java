@@ -1,10 +1,7 @@
 package com.example.e_commerce_api.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.Generated;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -18,6 +15,8 @@ import java.util.List;
 @Data
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +25,12 @@ public class Users implements UserDetails {
     private String email;
     private String password;
     private UserRole role;
+
+    public Users(String email, String encodedPassword, UserRole role) {
+        this.email = email;
+        this.password = encodedPassword;
+        this.role = role;
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
