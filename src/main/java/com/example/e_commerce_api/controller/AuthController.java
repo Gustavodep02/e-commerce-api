@@ -2,7 +2,9 @@ package com.example.e_commerce_api.controller;
 
 
 import com.example.e_commerce_api.dto.AuthDTO;
+import com.example.e_commerce_api.dto.LoginResponseDTO;
 import com.example.e_commerce_api.dto.RegisterDTO;
+import com.example.e_commerce_api.infra.security.TokenService;
 import com.example.e_commerce_api.model.UserRole;
 import com.example.e_commerce_api.model.Users;
 import com.example.e_commerce_api.repository.UserRepository;
@@ -25,8 +27,12 @@ public class AuthController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+    @Autowired
     private UserRepository userRepository;
+    @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private TokenService tokenService;
 
 
     @PostMapping("/login")
@@ -37,7 +43,9 @@ public class AuthController {
         );
         var authentication = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((Users)authentication.getPrincipal());
+
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
     @PostMapping("/register")
     public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO){
