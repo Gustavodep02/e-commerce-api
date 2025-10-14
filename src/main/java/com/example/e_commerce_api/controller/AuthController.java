@@ -7,6 +7,7 @@ import com.example.e_commerce_api.dto.RegisterDTO;
 import com.example.e_commerce_api.infra.security.TokenService;
 import com.example.e_commerce_api.model.User;
 import com.example.e_commerce_api.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
@@ -21,20 +22,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("auth")
+@RequiredArgsConstructor
 public class AuthController {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-    @Autowired
-    private TokenService tokenService;
+
+    private final AuthenticationManager authenticationManager;
+
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final TokenService tokenService;
 
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid AuthDTO authDTO){
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody @Valid AuthDTO authDTO){
         var usernamePassword = new UsernamePasswordAuthenticationToken(
                 authDTO.email(),
                 authDTO.password()
@@ -46,7 +48,7 @@ public class AuthController {
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
     @PostMapping("/register")
-    public ResponseEntity register(@RequestBody @Valid RegisterDTO registerDTO){
+    public ResponseEntity<String> register(@RequestBody @Valid RegisterDTO registerDTO){
         if(this.userRepository.findByEmail(registerDTO.email()) != null ){
             return ResponseEntity.badRequest().body("Email already in use");
         }

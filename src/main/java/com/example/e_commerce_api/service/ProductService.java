@@ -2,6 +2,7 @@ package com.example.e_commerce_api.service;
 
 import com.example.e_commerce_api.model.Product;
 import com.example.e_commerce_api.repository.ProductRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,10 +11,10 @@ import com.example.e_commerce_api.dto.ProductDTO;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class ProductService {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();

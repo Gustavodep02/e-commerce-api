@@ -5,18 +5,22 @@ import com.example.e_commerce_api.model.Product;
 import com.example.e_commerce_api.repository.ProductRepository;
 import com.example.e_commerce_api.service.ProductService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("products")
+@RequiredArgsConstructor
 public class ProductController {
-    @Autowired
-    private ProductService productService;
+
+    private final ProductService productService;
 
     @PostMapping
-    public ResponseEntity createProduct(@RequestBody @Valid ProductDTO productDTO){
+    public ResponseEntity<Product> createProduct(@RequestBody @Valid ProductDTO productDTO){
 
         var product = productService.saveProduct(new Product(
                 productDTO.name(),
@@ -28,12 +32,12 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity getAllProducts(){
+    public ResponseEntity<List<Product>> getAllProducts(){
         return ResponseEntity.ok(productService.getAllProducts());
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity getProductById(@PathVariable Long id){
+    public ResponseEntity<Product> getProductById(@PathVariable Long id){
         var product = productService.getProductById(id);
         if(product == null){
             return ResponseEntity.notFound().build();
@@ -42,7 +46,7 @@ public class ProductController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO){
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDTO productDTO){
         var updatedProduct = productService.patchProduct(id, productDTO);
         if(updatedProduct == null){
             return ResponseEntity.notFound().build();
@@ -51,7 +55,7 @@ public class ProductController {
     }
 
     @DeleteMapping
-    public ResponseEntity deleteProduct(@PathVariable Long id){
+    public ResponseEntity<Void> deleteProduct(@PathVariable Long id){
         var product = productService.getProductById(id);
         if(product == null){
             return ResponseEntity.notFound().build();
