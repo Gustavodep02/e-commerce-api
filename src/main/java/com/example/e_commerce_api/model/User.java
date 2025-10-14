@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Users implements UserDetails {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,7 +26,7 @@ public class Users implements UserDetails {
     private String password;
     private UserRole role;
 
-    public Users(String email, String encodedPassword, UserRole role) {
+    public User(String email, String encodedPassword, UserRole role) {
         this.email = email;
         this.password = encodedPassword;
         this.role = role;

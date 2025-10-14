@@ -5,8 +5,7 @@ import com.example.e_commerce_api.dto.AuthDTO;
 import com.example.e_commerce_api.dto.LoginResponseDTO;
 import com.example.e_commerce_api.dto.RegisterDTO;
 import com.example.e_commerce_api.infra.security.TokenService;
-import com.example.e_commerce_api.model.UserRole;
-import com.example.e_commerce_api.model.Users;
+import com.example.e_commerce_api.model.User;
 import com.example.e_commerce_api.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import jakarta.validation.Valid;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +41,7 @@ public class AuthController {
         );
         var authentication = this.authenticationManager.authenticate(usernamePassword);
 
-        var token = tokenService.generateToken((Users)authentication.getPrincipal());
+        var token = tokenService.generateToken((User)authentication.getPrincipal());
 
         return ResponseEntity.ok(new LoginResponseDTO(token));
     }
@@ -55,12 +53,12 @@ public class AuthController {
 
         String encodedPassword = passwordEncoder.encode(registerDTO.password());
 
-        Users user = new Users(
+        User user = new User(
                 registerDTO.email(),
                 encodedPassword,
                 registerDTO.Role()
         );
-            this.userRepository.save(user);
+        this.userRepository.save(user);
 
         return ResponseEntity.ok().build();
     }
