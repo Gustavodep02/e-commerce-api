@@ -26,6 +26,9 @@ public class CartItemService implements ICartItemService{
     public void addItemToCart(Long cartId, Long productId, int quantity) {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
+        if (product.getQuantity() < quantity){
+            throw new IllegalArgumentException("Not enough stock for product with id " + productId);
+        }
         CartItem cartItem = cart.getItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
@@ -56,6 +59,10 @@ public class CartItemService implements ICartItemService{
     @Override
     public void updateItemQuantity(Long cartId, Long productId, int quantity) {
         Cart cart = cartService.getCart(cartId);
+        Product product = productService.getProductById(productId);
+        if (product.getQuantity() < quantity){
+            throw new IllegalArgumentException("Not enough stock for product with id " + productId);
+        }
         cart.getItems().stream().filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
                 .ifPresent(item -> {

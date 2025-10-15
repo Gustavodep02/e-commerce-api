@@ -26,7 +26,7 @@ public class CartController {
         }
     }
 
-    @DeleteMapping("/{cartId}/clear")
+    @DeleteMapping("/{cartId}")
     public ResponseEntity<Void> clearCart(@PathVariable Long cartId){
             cartService.clearCart(cartId);
             return ResponseEntity.noContent().build();
@@ -41,4 +41,11 @@ public class CartController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping()
+    public ResponseEntity<Cart> createCart(){
+        Cart cart = cartService.createCart();
+        return ResponseEntity.ok(cart);
+    }
+
 }

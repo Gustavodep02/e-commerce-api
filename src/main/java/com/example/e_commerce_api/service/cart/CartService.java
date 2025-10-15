@@ -2,7 +2,6 @@ package com.example.e_commerce_api.service.cart;
 
 import com.example.e_commerce_api.exception.ResourceNotFoundException;
 import com.example.e_commerce_api.model.Cart;
-import com.example.e_commerce_api.model.CartItem;
 import com.example.e_commerce_api.repository.CartItemRepository;
 import com.example.e_commerce_api.repository.CartRepository;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +34,11 @@ public class CartService implements ICartService{
     public Double getTotalPrice(Long id) {
         Cart cart = getCart(id);
         return cart.getTotalAmount();
+    }
+
+    @Override
+    public Cart createCart() {
+        Cart cart = new Cart();
+        return cartRepository.save(cart);
     }
 }
