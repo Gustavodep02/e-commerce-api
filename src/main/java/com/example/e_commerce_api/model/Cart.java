@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,6 +22,17 @@ public class Cart {
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CartItem> items;
+
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
+    private List<Payment> payments;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Cart(User user) {
+        this.user = user;
+    }
 
     public void addItem(CartItem item) {
         items.add(item);

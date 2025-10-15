@@ -3,6 +3,8 @@ package com.example.e_commerce_api.controller;
 
 import com.example.e_commerce_api.exception.ResourceNotFoundException;
 import com.example.e_commerce_api.model.Cart;
+import com.example.e_commerce_api.model.User;
+import com.example.e_commerce_api.repository.UserRepository;
 import com.example.e_commerce_api.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.*;
 public class CartController {
 
     private final ICartService cartService;
+
+    private final UserRepository userRepository;
 
     @GetMapping("/{cartId}")
     public ResponseEntity<Cart> getCart(@PathVariable Long cartId){
@@ -43,8 +47,10 @@ public class CartController {
     }
 
     @PostMapping()
-    public ResponseEntity<Cart> createCart(){
-        Cart cart = cartService.createCart();
+    public ResponseEntity<Cart> createCart(@RequestBody Long userId){
+        var user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("User with id " + userId + " not found"));
+        Cart cart = cartService.createCart(user);
         return ResponseEntity.ok(cart);
     }
 
