@@ -17,10 +17,8 @@ public class CartService implements ICartService{
 
     @Override
     public Cart getCart(Long id) {
-        Cart cart = cartRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Cart with id " + id + " not found"));
-        Double totalAmount = cart.getTotalAmount();
-        cart.setTotalAmount(totalAmount);
-        return cartRepository.save(cart);
+        return cartRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cart with id " + id + " not found"));
     }
 
     @Override
