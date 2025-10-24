@@ -58,7 +58,7 @@ public class AuthController {
         User user = new User(
                 registerDTO.email(),
                 encodedPassword,
-                registerDTO.Role()
+                registerDTO.name()
         );
         this.userRepository.save(user);
 

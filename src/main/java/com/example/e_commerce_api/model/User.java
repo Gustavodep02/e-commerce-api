@@ -30,10 +30,10 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Cart> carts = new ArrayList<>();
 
-    public User(String email, String encodedPassword, UserRole role) {
+    public User(String email, String encodedPassword, String name) {
         this.email = email;
         this.password = encodedPassword;
-        this.role = role;
+        this.name = name;
     }
 
     @Override
