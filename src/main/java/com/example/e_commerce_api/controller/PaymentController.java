@@ -95,7 +95,7 @@ public class PaymentController {
         }
     }
 
-    @GetMapping("/carts/{cartId}/payments")
+    @GetMapping("/carts/{cartId}")
     public ResponseEntity<List<Payment>> getPaymentsByCartId(@PathVariable Long cartId) {
         Cart cart = cartService.getCart(cartId);
         return ResponseEntity.ok(cart.getPayments());

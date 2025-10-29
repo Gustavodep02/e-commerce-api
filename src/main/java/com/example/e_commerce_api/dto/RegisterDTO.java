@@ -1,6 +1,6 @@
 package com.example.e_commerce_api.dto;
 
-import com.example.e_commerce_api.model.UserRole;
+import jakarta.validation.constraints.NotBlank;
 
-public record RegisterDTO(String name, String email, String password) {
+public record RegisterDTO(@NotBlank String name, @NotBlank String email, @NotBlank String password) {
 }

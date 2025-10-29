@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ public class Cart {
     private Double totalAmount = 0.0;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<CartItem> items;
+    private Set<CartItem> items = new HashSet<>();
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL)
     private List<Payment> payments;
@@ -52,5 +53,9 @@ public class Cart {
             if(unitPrice == null) return 0.0;
             return unitPrice * item.getQuantity();
         }).reduce(0.0, Double::sum);
+    }
+    public Double getTotalAmount() {
+        updateTotalAmount();
+        return totalAmount;
     }
 }

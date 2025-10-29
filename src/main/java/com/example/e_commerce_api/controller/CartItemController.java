@@ -1,6 +1,7 @@
 package com.example.e_commerce_api.controller;
 
 import com.example.e_commerce_api.dto.CartItemAddDTO;
+import com.example.e_commerce_api.dto.CartItemResponseDTO;
 import com.example.e_commerce_api.dto.CartItemUpdateDTO;
 import com.example.e_commerce_api.model.Cart;
 import com.example.e_commerce_api.service.cart.ICartItemService;
@@ -19,10 +20,15 @@ public class CartItemController {
     private final ICartService cartService;
 
     @PostMapping
-    public ResponseEntity<Cart> addItemToCart(@RequestBody @Valid CartItemAddDTO cartItemDTO){
+    public ResponseEntity<CartItemResponseDTO> addItemToCart(@RequestBody @Valid CartItemAddDTO cartItemDTO){
         cartItemService.addItemToCart(cartItemDTO.cartId(), cartItemDTO.productId(), cartItemDTO.quantity());
         var cart = cartService.getCart(cartItemDTO.cartId());
-        return ResponseEntity.ok(cart);
+        var response = new CartItemResponseDTO(
+                cart.getId(),
+                cartService.getTotalPrice(cartItemDTO.cartId()),
+                cart.getItems()
+        );
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{cartId}/products/{productId}")
@@ -32,9 +38,14 @@ public class CartItemController {
     }
 
     @PutMapping("/{cartId}/products/{productId}")
-    public ResponseEntity<Cart> updateItemQuantity(@RequestBody @Valid CartItemUpdateDTO cartItemUpdateDTO, @PathVariable Long cartId, @PathVariable Long productId){
+    public ResponseEntity<CartItemResponseDTO> updateItemQuantity(@RequestBody @Valid CartItemUpdateDTO cartItemUpdateDTO, @PathVariable Long cartId, @PathVariable Long productId){
         cartItemService.updateItemQuantity(cartId, productId, cartItemUpdateDTO.quantity());
         var cart = cartService.getCart(cartId);
-        return ResponseEntity.ok(cart);
+        var response = new CartItemResponseDTO(
+                cart.getId(),
+                cartService.getTotalPrice(cartId),
+                cart.getItems()
+        );
+        return ResponseEntity.ok(response);
     }
 }

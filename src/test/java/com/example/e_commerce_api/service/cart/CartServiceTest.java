@@ -2,6 +2,7 @@ package com.example.e_commerce_api.service.cart;
 
 import com.example.e_commerce_api.exception.ResourceNotFoundException;
 import com.example.e_commerce_api.model.Cart;
+import com.example.e_commerce_api.model.CartItem;
 import com.example.e_commerce_api.model.User;
 import com.example.e_commerce_api.repository.CartItemRepository;
 import com.example.e_commerce_api.repository.CartRepository;
@@ -21,14 +22,16 @@ class CartServiceTest {
         var cartRepository = mock(CartRepository.class);
         var cart = new Cart();
         cart.setId(1L);
-        cart.setTotalAmount(100.0);
+        var item = new CartItem();
+        item.setUnitPrice(100.0);
+        item.setQuantity(1);
+        cart.getItems().add(item);
         when(cartRepository.findById(1L)).thenReturn(Optional.of(cart));
         when(cartRepository.save(cart)).thenReturn(cart);
 
         var cartService = new CartService(cartRepository, mock(CartItemRepository.class));
         var result = cartService.getCart(1L);
-
-        assertEquals(cart, result);
+        assertEquals(cart.getId(), result.getId());
         assertEquals(100.0, result.getTotalAmount());
     }
 
@@ -66,7 +69,10 @@ class CartServiceTest {
         var cartRepository = mock(CartRepository.class);
         var cart = new Cart();
         cart.setId(1L);
-        cart.setTotalAmount(200.0);
+        var item = new CartItem();
+        item.setUnitPrice(100.0);
+        item.setQuantity(2);
+        cart.getItems().add(item);
         when(cartRepository.findById(1L)).thenReturn(Optional.of(cart));
         when(cartRepository.save(cart)).thenReturn(cart);
 
