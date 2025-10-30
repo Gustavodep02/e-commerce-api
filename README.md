@@ -74,6 +74,20 @@ You can also run the generated JAR:
 ```bash
 java -jar target/*.jar
 ```
+---
+
+## 📘 API Documentation (Swagger)
+
+This project includes **Swagger UI** for exploring and testing the API
+endpoints.
+
+After starting the application, open in your browser:
+
+    http://localhost:8080/swagger-ui.html
+
+Features: - Interactive documentation for all endpoints\
+- JWT "Authorize" button for testing protected routes\
+- Organized tags for Authentication, Products, Carts, Payments and Cart Items
 
 ---
 
