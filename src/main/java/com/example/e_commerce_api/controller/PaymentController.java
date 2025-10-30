@@ -10,6 +10,10 @@ import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +27,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/payments")
+@Tag(name = "payments", description = "Endpoints for payment checkout and retrieval")
+@SecurityRequirement(name = "bearerAuth")
 public class PaymentController {
 
     private final ICartService cartService;
@@ -40,6 +46,9 @@ public class PaymentController {
     private String stripeSecretKey;
 
     @PostMapping("/checkout/{cartId}")
+    @Operation(summary = "Creates a Stripe checkout session for the specified cart", description = "Generates a checkout session URL for payment processing")
+    @ApiResponse(responseCode = "200", description = "Checkout session created successfully")
+    @ApiResponse(responseCode = "500", description = "Error creating checkout session")
     public ResponseEntity<Map<String, Object>> createCheckoutSession(@PathVariable Long cartId) {
         try {
             Cart cart = cartService.getCart(cartId);
@@ -96,6 +105,8 @@ public class PaymentController {
     }
 
     @GetMapping("/carts/{cartId}")
+    @Operation(summary = "Retrieves all payments for the specified cart", description = "Fetches a list of payments associated with a given cart ID")
+    @ApiResponse(responseCode = "200", description = "Payments retrieved successfully")
     public ResponseEntity<List<Payment>> getPaymentsByCartId(@PathVariable Long cartId) {
         Cart cart = cartService.getCart(cartId);
         return ResponseEntity.ok(cart.getPayments());
